@@ -7,17 +7,34 @@
 //
 
 #import "CRViewController.h"
+#import "CountryController.h"
+#import "Country.h"
 
 @interface CRViewController ()
+@property (weak, nonatomic) IBOutlet UITextField *textField;
+@property (weak, nonatomic) IBOutlet UITextView *textView;
 
 @end
 
 @implementation CRViewController
 
+
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-	// Do any additional setup after loading the view, typically from a nib.
+	
+}
+
+- (IBAction)search:(id)sender {
+ 
+    NSString *name = [self.textField.text stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+    [[CountryController sharedInstance] getCountriesWithName:name completion:^(NSArray *countries) {
+        Country *country = [countries firstObject];
+        
+        NSString *info = [NSString stringWithFormat:@"name: %@ capital: %@ population: %@", country.name, country.capital, country.population];
+        self.textView.text = info;
+    }];
 }
 
 - (void)didReceiveMemoryWarning
